@@ -14,6 +14,8 @@ variable "aws_region" {
 
 variable "vpc_id" {}
 
+variable "vpc_cidr_blocks" {}
+
 variable "ecs_cluster_id" {}
 
 variable "subnet_private_ids" {
