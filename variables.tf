@@ -55,6 +55,11 @@ variable "task_lb_container_port" {
   default = 8080
 }
 
+variable "task_lb_container_name" {
+  type    = string
+  default = ""
+}
+
 variable "generate_public_ip" {
   type    = bool
   default = false
