@@ -10,6 +10,10 @@ resource "aws_acm_certificate" "alb_listener_cert" {
   lifecycle {
     create_before_destroy = true
   }
+
+  depends_on = [
+    aws_lb.application_load_balancer
+  ]
 }
 
 resource "aws_route53_record" "dns_record_validation" {
