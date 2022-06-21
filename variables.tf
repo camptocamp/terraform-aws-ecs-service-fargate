@@ -7,6 +7,14 @@ variable "app_environment" {
   default = "prod"
 }
 
+variable "dns_zone" {
+  type = string
+}
+
+variable "dns_host" {
+  type = string
+}
+
 variable "aws_region" {
   type    = string
   default = "eu-west-1"
