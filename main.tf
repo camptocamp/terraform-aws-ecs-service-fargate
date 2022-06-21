@@ -22,7 +22,7 @@ resource "aws_ecs_service" "aws-ecs-service" {
     container_port   = var.task_lb_container_port
   }
 
-  depends_on = [aws_lb_listener.listener]
+  depends_on = [aws_lb_listener.https_listener]
 }
 
 resource "aws_security_group" "service_security_group" {
@@ -87,6 +87,13 @@ resource "aws_security_group" "load_balancer_security_group" {
     cidr_blocks      = ["0.0.0.0/0"]
     ipv6_cidr_blocks = ["::/0"]
   }
+  ingress {
+    from_port        = 443
+    to_port          = 443
+    protocol         = "tcp"
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
+  }
 
   egress {
     from_port        = 0
@@ -103,10 +110,16 @@ resource "aws_security_group" "load_balancer_security_group" {
 
 resource "aws_lb_target_group" "target_group" {
   name        = "${var.app_name}-${var.app_environment}-tg"
-  port        = var.task_lb_container_port
+  port        = 80
   protocol    = "HTTP"
   target_type = "ip"
   vpc_id      = var.vpc_id
+
+  health_check {
+    enabled = true
+    port    = 80
+    matcher = "401"
+  }
 
   tags = {
     Name        = "${var.app_name}-lb-tg"
@@ -114,13 +127,31 @@ resource "aws_lb_target_group" "target_group" {
   }
 }
 
-resource "aws_lb_listener" "listener" {
+resource "aws_lb_listener" "http_listener" {
   load_balancer_arn = aws_lb.application_load_balancer.id
   port              = 80
   protocol          = "HTTP"
+
+  default_action {
+    type = "redirect"
+
+    redirect {
+      port        = "443"
+      protocol    = "HTTPS"
+      status_code = "HTTP_301"
+    }
+  }
+}
+
+resource "aws_lb_listener" "https_listener" {
+  load_balancer_arn = aws_lb.application_load_balancer.id
+  port              = 443
+  protocol          = "HTTPS"
+  certificate_arn   = aws_acm_certificate_validation.alb_listener_cert_validation.certificate_arn
 
   default_action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.target_group.id
   }
 }
+
