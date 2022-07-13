@@ -110,14 +110,14 @@ resource "aws_security_group" "load_balancer_security_group" {
 
 resource "aws_lb_target_group" "target_group" {
   name        = "${var.app_name}-${var.app_environment}-tg"
-  port        = 80
+  port        = var.task_lb_container_port
   protocol    = "HTTP"
   target_type = "ip"
   vpc_id      = var.vpc_id
 
   health_check {
     enabled = true
-    port    = 80
+    port    = var.task_lb_container_port
     matcher = "401"
   }
 
