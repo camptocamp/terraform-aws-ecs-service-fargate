@@ -70,6 +70,11 @@ variable "task_lb_container_name" {
   default = ""
 }
 
+variable "task_lb_custom_certificate_arn" {
+  type    = string
+  default = ""
+}
+
 variable "generate_public_ip" {
   type    = bool
   default = false

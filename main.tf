@@ -64,8 +64,8 @@ resource "aws_security_group" "service_security_group" {
   }
 }
 
-resource "aws_lb" "application_load_balancer" {
-  name               = "${var.app_name}-${var.app_environment}-alb"
+resource "aws_lb" "this" {
+  name               = "${var.app_name}-${var.app_environment}"
   internal           = false
   load_balancer_type = "application"
   subnets            = var.subnet_public_ids
@@ -128,7 +128,7 @@ resource "aws_lb_target_group" "target_group" {
 }
 
 resource "aws_lb_listener" "http_listener" {
-  load_balancer_arn = aws_lb.application_load_balancer.id
+  load_balancer_arn = aws_lb.this.id
   port              = 80
   protocol          = "HTTP"
 
@@ -144,10 +144,10 @@ resource "aws_lb_listener" "http_listener" {
 }
 
 resource "aws_lb_listener" "https_listener" {
-  load_balancer_arn = aws_lb.application_load_balancer.id
+  load_balancer_arn = aws_lb.this.id
   port              = 443
   protocol          = "HTTPS"
-  certificate_arn   = aws_acm_certificate_validation.alb_listener_cert_validation.certificate_arn
+  certificate_arn   = var.task_lb_custom_certificate_arn != "" ? var.task_lb_custom_certificate_arn : aws_acm_certificate_validation.alb_listener_cert_validation.0.certificate_arn
 
   default_action {
     type             = "forward"
