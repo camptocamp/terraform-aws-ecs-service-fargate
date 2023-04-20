@@ -8,11 +8,13 @@ variable "app_environment" {
 }
 
 variable "dns_zone" {
-  type = string
+  type    = string
+  default = ""
 }
 
 variable "dns_host" {
-  type = string
+  type    = string
+  default = ""
 }
 
 variable "aws_region" {

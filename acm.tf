@@ -1,5 +1,5 @@
 resource "aws_acm_certificate" "alb_listener_cert" {
-  domain_name       = "probe-1.eu-west-1.aws.probes.camptocamp.com"
+  domain_name       = var.dns_host
   validation_method = "DNS"
 
   tags = {
