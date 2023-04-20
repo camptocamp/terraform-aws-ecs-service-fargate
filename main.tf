@@ -116,9 +116,10 @@ resource "aws_lb_target_group" "target_group" {
   vpc_id      = var.vpc_id
 
   health_check {
-    enabled = true
-    port    = var.task_lb_container_port
-    matcher = "401"
+    enabled = var.task_lb_healthcheck.enabled
+    path    = var.task_lb_healthcheck.path
+    port    = var.task_lb_healthcheck.port
+    matcher = var.task_lb_healthcheck.matcher
   }
 
   tags = {

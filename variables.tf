@@ -75,6 +75,23 @@ variable "task_lb_custom_certificate_arn" {
   default = ""
 }
 
+variable "task_lb_healthcheck" {
+  type = object(
+    {
+      enabled = bool
+      matcher = string
+      path    = string
+      port    = number
+    }
+  )
+  default = {
+    enabled = true
+    matcher = "200"
+    path    = "/"
+    port    = 8080
+  }
+}
+
 variable "generate_public_ip" {
   type    = bool
   default = false
