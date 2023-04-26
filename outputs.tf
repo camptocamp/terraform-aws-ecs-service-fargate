@@ -9,3 +9,7 @@ output "alb_security_group_id" {
 output "service_security_group_id" {
   value = aws_security_group.service_security_group.id
 }
+
+output "alb_https_listener_arn" {
+  value = aws_lb_listener.https_listener.arn
+}
