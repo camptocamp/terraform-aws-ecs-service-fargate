@@ -55,6 +55,11 @@ variable "task_definition" {
   description = "The task definition to use for the task"
 }
 
+variable "task_definition_revision" {
+  description = "The task definition revision to use for the task. If empty the service will always use the latest version."
+  default     = ""
+}
+
 variable "task_desired_count" {
   type    = number
   default = 1

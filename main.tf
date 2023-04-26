@@ -1,7 +1,7 @@
 resource "aws_ecs_service" "aws-ecs-service" {
   name                 = "${var.app_name}-${var.app_environment}-ecs-service"
   cluster              = var.ecs_cluster_id
-  task_definition      = "${var.task_definition.family}:${var.task_definition.revision}"
+  task_definition      = var.task_definition_revision != "" ? "${var.task_definition.family}:${var.task_definition.revision}" : "${var.task_definition.family}"
   launch_type          = "FARGATE"
   scheduling_strategy  = "REPLICA"
   desired_count        = var.task_desired_count
@@ -155,4 +155,3 @@ resource "aws_lb_listener" "https_listener" {
     target_group_arn = aws_lb_target_group.target_group.id
   }
 }
-
