@@ -36,6 +36,15 @@ variable "subnet_public_ids" {
   type = list(string)
 }
 
+variable "service_registries" {
+  type = list(object(
+    {
+      registry_arn = string
+    }
+  ))
+  default = []
+}
+
 variable "task_ressources_cpu" {
   type    = string
   default = 256

@@ -22,6 +22,13 @@ resource "aws_ecs_service" "aws-ecs-service" {
     container_port   = var.task_lb_container_port
   }
 
+  dynamic "service_registries" {
+    for_each = var.service_registries
+    content {
+      registry_arn = service_registries.value["registry_arn"]
+    }
+  }
+
   depends_on = [aws_lb_listener.https_listener]
 }
 
