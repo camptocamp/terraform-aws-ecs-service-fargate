@@ -45,7 +45,7 @@ resource "aws_security_group" "service_security_group" {
   ingress {
     protocol    = "6"
     from_port   = 80
-    to_port     = 8000
+    to_port     = 9900
     cidr_blocks = [var.vpc_cidr_blocks]
   }
 
