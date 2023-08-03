@@ -18,9 +18,18 @@ resource "aws_acm_certificate" "alb_listener_cert" {
   ]
 }
 
+locals {
+  dvos = flatten([
+    for cert in aws_acm_certificate.alb_listener_cert : [
+      for dvo in cert.domain_validation_options : dvo
+    ]
+  ])
+
+}
+
 resource "aws_route53_record" "dns_record_validation" {
   for_each = {
-    for dvo in aws_acm_certificate.alb_listener_cert.*.domain_validation_options : dvo.domain_name => {
+    for dvo in local.dvos : dvo.domain_name => {
       name   = dvo.resource_record_name
       record = dvo.resource_record_value
       type   = dvo.resource_record_type
